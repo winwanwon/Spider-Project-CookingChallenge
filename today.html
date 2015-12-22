@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Cooking Challlenge</title>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="fonts/thsarabunnew.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="morphext/animate.css">
+  <style>
+  .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 18px !important;
+  }
+  </style>
+</head>
+<body>
+<script>
+
+var fb_name;
+$(document).ready( function(){
+  $("#view_profile").hide();
+});
+
+// This is called with the results from from FB.getLoginStatus().
+function statusChangeCallback(response) {
+  console.log('statusChangeCallback');
+  console.log(response);
+  // The response object is returned with a status field that lets the
+  // app know the current login status of the person.
+  // Full docs on the response object can be found in the documentation
+  // for FB.getLoginStatus().
+  if (response.status === 'connected') {
+    // Logged into your app and Facebook.
+    testAPI();
+    $("#view_profile").show();
+  } else if (response.status === 'not_authorized') {
+    // The person is logged into Facebook, but not your app.
+    $("#view_profile").hide();
+  } else {
+    // The person is not logged into Facebook, so we're not sure if
+    // they are logged into this app or not.
+    $("#view_profile").hide();
+  }
+}
+
+// This function is called when someone finishes with the Login
+// Button.  See the onlogin handler attached to it in the sample
+// code below.
+function checkLoginState() {
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+}
+
+window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '1615682595348434',
+    xfbml      : true,
+    version    : 'v2.4'
+  });
+
+  // Now that we've initialized the JavaScript SDK, we call
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
+
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+
+};
+
+// Load the SDK asynchronously
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "https://connect.facebook.net/en_US/sdk.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+// Here we run a very simple test of the Graph API after login is
+// successful.  See statusChangeCallback() for when this call is made.
+function testAPI() {
+  console.log('Welcome!  Fetching your information.... ');
+  FB.api('/me', function(response) {
+    console.log(response);
+    console.log('Successful login for: ' + response.name);
+    document.getElementById('status').innerHTML =
+    '<img class="profile-picture" src="http://graph.facebook.com/v2.4/' + response.id + '/picture"> ' + response.name + '';
+    document.getElementById('fb_name').innerHTML =
+    '<img class="profile-picture" src="http://graph.facebook.com/v2.4/' + response.id + '/picture"> ' + response.name + '';
+    fb_name = response.name;
+  });
+}
+</script>
+
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">
+        <img src="img/CCSpider-Logo.png" height="40" style="margin-top:-10px; padding:0;" alt=""></a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+          <li class="active"><a href="#"><i class="fa fa-trophy"></i> Today's Challenge</a></li>
+          <li><a href="recipes.html"><i class="fa fa-cutlery"></i> Recipes</a></li>
+          <li><a href="rules.html"><i class="fa fa-gamepad"></i> How to Yum!</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="profile.html" id="view_profile"><i class="fa fa-user"></i> Profile</a>
+          </li>
+          <li>
+            <div style="display:inline;" id="status">
+            </div>
+            <fb:login-button class="fb_login" scope="public_profile,email" onlogin="checkLoginState();" data-auto-logout-link="true">
+            Join the Challenge!
+          </fb:login-button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container full-width header text-center">
+  <span class="headtag-banner" style="margin: -30px auto 0 auto;">
+    <h3>TODAY'S INGREDIENTS</h3>
+    วัตถุดิบประจำวัน
+  </span>
+  <div class="row" style="margin: 30px auto;">
+    <div class="col-xs-12 text-center">
+      <div class="ingredient-circle animated zoomIn"><img src="img/ING-Pork.png" alt=""><span style="display:block; margin: 5px auto; color:#FFF;">เนื้อหมู CP</span></div>
+      <div class="ingredient-circle animated zoomIn"><img src="img/ING-Sauce.png" alt=""><span style="display:block; margin: 5px auto; color:#FFF;">ซอสมะเขือเทศ</span></div>
+      <div class="ingredient-circle animated zoomIn"><img src="img/ING-Spaghetti.png" alt=""><span style="display:block; margin: 5px auto; color:#FFF;">สปาเกตตี้</span></div>
+    </div>
+  </div>
+  <div class="row">
+    <button type="button" class="btn btn-lg btn-green" data-toggle="modal" data-target="#dish_submit">
+      <h4>ส่งอาหารเข้าร่วมแข่งขัน!</h4>
+      <h5>จะหมดเวลาใน
+      <span id="countdown">
+      	<span class="hours">00</span>:<span class="minutes">00</span>:<span class="seconds">00</span>
+      </span>
+      </h5>
+    </button>
+  </div>
+</div>
+
+<div class="container" style="margin-top:30px;" id="content">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="block">
+        <h2 style="margin-top:5px;">ยอดนิยม</h2>
+        <table class="table">
+          <tr>
+            <td><img src="img/mcburger.jpg" class="img-responsive img-circle" width="80" alt=""></td>
+            <td>
+              เบอร์เกอร์หมูไส้สปาเก็ตตี้
+              <h6>โดย <a href="#">อิอิกำ อิอิแบ</a></h6>
+              <button class="btn btn-yum not-yum" data-toggle="tooltip" data-placement="right" title="38 YUMS!" data-toggle="tooltip" data-placement="right" title="38 YUMS!"></button> <span class="yum-count-text">37 YUMS!</span>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="img/mcburger.jpg" class="img-responsive img-circle" width="80" alt=""></td>
+            <td>
+              เบอร์เกอร์สปาเก็ตตี้ไส้หมู
+              <h6>โดย <a href="#">อิอิกำ อิอิแบ</a></h6>
+              <button class="btn btn-yum not-yum" data-toggle="tooltip" data-placement="right" title="16 YUMS!"></button> <span class="yum-count-text">15 YUMS!</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="block">
+        <h2 style="margin-top:5px;">ล่าสุด</h2>
+        <table class="table" id="recent">
+          <tr>
+            <td><img src="img/mcburger.jpg" class="img-responsive img-circle" width="80" alt=""></td>
+            <td>
+              เบอร์เกอร์หมูไส้สปาเก็ตตี้
+              <h6>โดย <a href="#">อิอิกำ อิอิแบ</a></h6>
+              <button class="btn btn-yum not-yum" data-toggle="tooltip" data-placement="right" title="2 YUMS!"></button> <span class="yum-count-text">1 YUMS!</span>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="img/mcburger.jpg" class="img-responsive img-circle" width="80" alt=""></td>
+            <td>
+              เบอร์เกอร์สปาเก็ตตี้ไส้หมู
+              <h6>โดย <a href="#">อิอิกำ อิอิแบ</a></h6>
+              <button class="btn btn-yum not-yum" data-toggle="tooltip" data-placement="right" title="1 YUMS!"></button> <span class="yum-count-text">NO YUMS!</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="block">
+        <h2 style="margin-top:5px;">ยำมั่ว!</h2>
+        <table class="table">
+          <tr>
+            <td><img src="img/mcburger.jpg" class="img-responsive img-circle" width="80" alt=""></td>
+            <td>
+              เบอร์เกอร์หมูไส้สปาเก็ตตี้
+              <h6>โดย <a href="#">อิอิกำ อิอิแบ</a></h6>
+              <button class="btn btn-yum not-yum" data-toggle="tooltip" data-placement="right" title="3 YUMS!"></button> <span class="yum-count-text">2 YUMS!</span>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="img/mcburger.jpg" class="img-responsive img-circle" width="80" alt=""></td>
+            <td>
+              เบอร์เกอร์สปาเก็ตตี้ไส้หมู
+              <h6>โดย <a href="#">อิอิกำ อิอิแบ</a></h6>
+              <button class="btn btn-yum not-yum" data-toggle="tooltip" data-placement="right" title="10 YUMS!"></button> <span class="yum-count-text">9 YUMS!</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 text-center"><a href="#show_more" id="show_more" class="show_more"><i class="fa fa-chevron-down"></i> คลิกเพื่อดูเพิ่มเติม...</a>
+    </div>
+  </div>
+</div>
+<div class="container full-width footer">
+  Cooking Challenge Project, Spider Camp Charlie (2015).
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="dish_submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title text-center" ng-hide="dish_name">ส่งอาหารเข้าร่วมแข่งขัน!</h4>
+        <h4 class="modal-title text-center" ng-show="dish_name">ส่ง <span style="font-weight:bold; color:#3498db">{{dish_name}}</span> เข้าร่วมแข่งขัน!</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-4 control-label">ปรุงโดย / Cooked by</label>
+            <div class="col-sm-8">
+              <span id="fb_name"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-4 control-label">ชื่อเมนู / Dish's name</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" ng-model="dish_name" id="dish_name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-4 control-label">คำอธิบาย / Description</label>
+            <div class="col-sm-8">
+              <textarea class="form-control" rows="3" id="description"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-4 control-label">วิธีการทำ / How to (ไม่บังคับ)</label>
+            <div class="col-sm-8">
+              <textarea class="form-control" rows="3" id="howto"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-4 control-label">อัพโหลดรูป / Image upload</label>
+            <div class="col-sm-8">
+              <input type="file" name="pic" accept="image/*" value="อัพโหลดรูป">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-4 control-label"></label>
+            <div class="col-sm-8">
+              <a href="#" style="font-size: 9pt;">ข้อตกลงและเงื่อนไข / Terms & Condition</a>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-4 control-label"></label>
+            <div class="col-sm-8">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" value="">
+                  <i class="fa fa-facebook-square"></i> แชร์ผ่าน Facebook
+                </label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-green disabled" data-dismiss="modal" id="submit">ส่งแบบฟอร์ม</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-sm" id="badge_got" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h3>คุณได้รับ Badge!</h3>
+      </div>
+      <div class="modal-body text-center">
+          <img src="img/LIGHT.png" class="light">
+          <img src="img/Badge-firstpost.png" class="badge-first animated zoomIn">
+        <h4><b>The First Big Step</b></h4>
+        <h5>ส่ง Challenge ครั้งแรก!</h5>
+        <br>
+        <button type="button" class="btn btn-green" data-dismiss="modal" id="badge_got_closed">เย้ ดีใจจัง</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function(){
+  var dish_name,description,how_to
+
+  if(!fb_name){
+    $("#fb_name").html('<fb:login-button class="fb_login" scope="public_profile,email" onlogin="checkLoginState();" data-auto-logout-link="true">Login to join the challenge!</fb:login-button>')
+  }
+
+  $("#submit").click( function(){
+    dish_name = $("#dish_name").val();
+    description = $("#description").val();
+    how_to = $("#how_to").val();
+    $('#badge_got').modal('show')
+  });
+
+  $(".form-control").keyup( function(){
+    dish_name = $("#dish_name").val();
+    description = $("#description").val();
+    how_to = $("#how_to").val();
+    if(dish_name&&description&&fb_name){
+      $("#submit").removeClass("disabled");
+    } else {
+      $("#submit").addClass("disabled");
+    }
+  });
+
+  $("#badge_got_closed").click(function(){
+    $("#recent").prepend("<tr id='just_post' class='animated fadeIn'><td><img src='img/spaghetti-sauce.jpg' width='80' class='img-responsive img-circle'></td><td>" + dish_name + "<h6>โดย " + fb_name + "</h6> <button class='btn btn-yum not-yum' data-toggle='tooltip' data-placement='right' title='1 YUMS!'></button> <span class='yum-count-text'>NO YUMS!</span></td></tr>");
+    $('html, body').animate({
+        scrollTop: $("#content").offset().top
+    }, 2000);
+  });
+
+  $(".btn-yum").click(function(){
+    $(this).next(".yum-count-text").toggle();
+    $(this).toggleClass("not-yum");
+    $(this).toggleClass("yummed");
+    $(this).tooltip('show');
+  })
+
+  $(".show_more").click( function(){
+    var cloning = $("table").html();
+    $("table").append(cloning);
+  })
+
+});
+
+$(function() {
+  $('a[href*=#]:not([href=#])').click(function() {
+    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+      var target = $(this.hash);
+      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+      if (target.length) {
+        $('html,body').animate({
+          scrollTop: target.offset().top
+        }, 1000);
+        return false;
+      }
+    }
+  });
+});
+
+/*
+* Basic Count Down to Date and Time
+* Author: @mrwigster / trulycode.com
+*/
+(function (e) {
+  e.fn.countdown = function (t, n) {
+  function i() {
+    eventDate = Date.parse(r.date) / 1e3;
+    currentDate = Math.floor(e.now() / 1e3);
+    if (eventDate <= currentDate) {
+      n.call(this);
+      clearInterval(interval)
+    }
+    seconds = eventDate - currentDate;
+    days = Math.floor(seconds / 86400);
+    seconds -= days * 60 * 60 * 24;
+    hours = Math.floor(seconds / 3600);
+    seconds -= hours * 60 * 60;
+    minutes = Math.floor(seconds / 60);
+    seconds -= minutes * 60;
+    days == 1 ? thisEl.find(".timeRefDays").text("day") : thisEl.find(".timeRefDays").text("days");
+    hours == 1 ? thisEl.find(".timeRefHours").text("hour") : thisEl.find(".timeRefHours").text("hours");
+    minutes == 1 ? thisEl.find(".timeRefMinutes").text("minute") : thisEl.find(".timeRefMinutes").text("minutes");
+    seconds == 1 ? thisEl.find(".timeRefSeconds").text("second") : thisEl.find(".timeRefSeconds").text("seconds");
+    if (r["format"] == "on") {
+      days = String(days).length >= 2 ? days : "0" + days;
+      hours = String(hours).length >= 2 ? hours : "0" + hours;
+      minutes = String(minutes).length >= 2 ? minutes : "0" + minutes;
+      seconds = String(seconds).length >= 2 ? seconds : "0" + seconds
+    }
+    if (!isNaN(eventDate)) {
+      thisEl.find(".hours").text(hours);
+      thisEl.find(".minutes").text(minutes);
+      thisEl.find(".seconds").text(seconds)
+    } else {
+      alert("Invalid date. Example: 30 Tuesday 2013 15:50:00");
+      clearInterval(interval)
+    }
+  }
+  var thisEl = e(this);
+  var r = {
+    date: null,
+    format: null
+  };
+  t && e.extend(r, t);
+  i();
+  interval = setInterval(i, 1e3)
+  }
+  })(jQuery);
+  $(document).ready(function () {
+  function e() {
+    var e = new Date;
+    e.setDate(e.getDate() + 60);
+    dd = e.getDate();
+    mm = e.getMonth() + 1;
+    y = e.getFullYear();
+    futureFormattedDate = mm + "/" + dd + "/" + y;
+    return futureFormattedDate
+  }
+  $("#countdown").countdown({
+    date: "27 July 2015 00:00:00", // Change this to your desired date to countdown to
+    format: "on"
+  });
+});
+</script>
+</body>
+</html>

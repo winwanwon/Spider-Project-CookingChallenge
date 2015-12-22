@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Cooking Challlenge</title>
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="fonts/thsarabunnew.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="morphext/animate.css">
+  <link rel="stylesheet" href="morphext/morphext.css">
+  <script src="morphext/morphext.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<script>
+
+$(document).ready( function(){
+  $("#view_profile").hide();
+});
+
+// This is called with the results from from FB.getLoginStatus().
+function statusChangeCallback(response) {
+  console.log('statusChangeCallback');
+  console.log(response);
+  // The response object is returned with a status field that lets the
+  // app know the current login status of the person.
+  // Full docs on the response object can be found in the documentation
+  // for FB.getLoginStatus().
+  if (response.status === 'connected') {
+    // Logged into your app and Facebook.
+    testAPI();
+    $("#view_profile").show();
+  } else if (response.status === 'not_authorized') {
+    // The person is logged into Facebook, but not your app.
+    $("#view_profile").hide();
+  } else {
+    // The person is not logged into Facebook, so we're not sure if
+    // they are logged into this app or not.
+    $("#view_profile").hide();
+  }
+}
+
+// This function is called when someone finishes with the Login
+// Button.  See the onlogin handler attached to it in the sample
+// code below.
+function checkLoginState() {
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+}
+
+window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '1615682595348434',
+    xfbml      : true,
+    version    : 'v2.4'
+  });
+
+  // Now that we've initialized the JavaScript SDK, we call
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
+
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+
+};
+
+// Load the SDK asynchronously
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "https://connect.facebook.net/en_US/sdk.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+// Here we run a very simple test of the Graph API after login is
+// successful.  See statusChangeCallback() for when this call is made.
+function testAPI() {
+  console.log('Welcome!  Fetching your information.... ');
+  FB.api('/me', function(response) {
+    console.log(response);
+    console.log('Successful login for: ' + response.name);
+    document.getElementById('status').innerHTML =
+    '<img class="profile-picture" src="http://graph.facebook.com/v2.4/' + response.id + '/picture"> ' + response.name + '';
+  });
+}
+</script>
+
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">
+        <img src="img/CCSpider-Logo.png" height="40" style="margin-top:-10px; padding:0;" alt=""></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="today.html"><i class="fa fa-trophy"></i> Today's Challenge</a></li>
+        <li><a href="recipes.html"><i class="fa fa-cutlery"></i> Recipes</a></li>
+        <li><a href="rules.html"><i class="fa fa-gamepad"></i> How to Yum!</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="profile.html" id="view_profile"><i class="fa fa-user"></i> Profile</a>
+        </li>
+        <li>
+          <div style="display:inline;" id="status">
+
+          </div>
+          <fb:login-button class="fb_login" scope="public_profile,email" onlogin="checkLoginState();" data-auto-logout-link="true">
+          Join the Challenge!
+        </fb:login-button>
+      </li>
+    </ul>
+  </div>
+</div>
+</nav>
+
+<div class="container full-width header text-center">
+  <img src="img/CCSpider-Logo.png" style="width: 420px; margin:auto;" class="img-responsive" alt="">
+  <span class="headtag-banner">
+    <h4 style="margin-top:24px;">เราท้าให้คุณทำอาหารจาก <b><span id="js-rotating">เนื้อหมู CP,ซอสมะเขือเทศ,สปาเก็ตตี้</span><span id="show-on-hover"></span></b></h4>
+  </span>
+</div>
+<div class="full-width text-center">
+  <div class="ingredient" id="pork">
+    <img src="img/ING-Pork.png" class="img-responsive img-ing" />
+  </div>
+  <div class="ingredient" id="sauce">
+    <img src="img/ING-Sauce.png" class="img-responsive img-ing"  />
+  </div>
+  <div class="ingredient" id="spaghetti">
+    <img src="img/ING-Spaghetti.png" class="img-responsive img-ing" />
+  </div>
+</div>
+<div class="full-width text-center">
+  <a href="today.html" style="margin-top: -30px;" class="btn btn-lg btn-green" >ตอบรับคำท้า!</a>
+</div>
+
+<div class="container" id="content">
+  <div class="row">
+    <div class="col-md-8">
+      <div id="carousel-example-generic" style="margin: 13px auto;" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+          <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+          <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+          <div class="item active">
+            <a href="#"><img src="img/ANNOUCEMENT1.png"></a>
+          </div>
+          <div class="item">
+            <a href="#"><img src="img/ANNOUCEMENT2.png"></a>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="block text-center" style="height: 429px;">
+        <h3>PREPARE FOR <br><span style="color:#3498DB; font-weight:bold;">NEXT CHALLENGE</span></h3>
+        <h4>เตรียมวัตถุดิบสำหรับวันถัดไป</h4>
+        <br>
+        <table class="table">
+          <tr>
+            <td><h4><i class="fa fa-calendar-o"></i> 26 สิงหาคม</h4></td>
+            <td>
+              <div class="ingredient-circle-mini"><img src="img/ING-Pork.png"  data-toggle="tooltip" data-placement="bottom" title="เนื้อหมู CP"></div>
+              <div class="ingredient-circle-mini"><img src="img/egg6.png"  data-toggle="tooltip" data-placement="bottom" title="ไข่ไก่"></div>
+              <div class="ingredient-circle-mini"><img src="img/vegetable5.png"  data-toggle="tooltip" data-placement="bottom" title="ผักสด"></div>
+            </td>
+          </tr>
+          <tr>
+            <td><h4><i class="fa fa-calendar-o"></i> 27 สิงหาคม</h4></td>
+            <td>
+              <div class="ingredient-circle-mini"><img src="img/egg6.png"  data-toggle="tooltip" data-placement="bottom" title="ไข่ไก่"></div>
+              <div class="ingredient-circle-mini"><img src="img/ING-Sauce.png"  data-toggle="tooltip" data-placement="bottom" title="ซอสมะเขือเทศ"></div>
+              <div class="ingredient-circle-mini"><img src="img/shrimp.png"  data-toggle="tooltip" data-placement="bottom" title="กุ้งสด"></div>
+            </td>
+          </tr>
+          <tr>
+            <td><h4><i class="fa fa-calendar-o"></i> 28 สิงหาคม</h4></td>
+            <td>
+              <div class="ingredient-circle-mini"><img src="img/vegetable5.png"  data-toggle="tooltip" data-placement="bottom" title="ผักสด"></div>
+              <div class="ingredient-circle-mini"><img src="img/ING-Pork.png"  data-toggle="tooltip" data-placement="bottom" title="เนื้อหมู CP"></div>
+              <div class="ingredient-circle-mini"><img src="img/shrimp.png"  data-toggle="tooltip" data-placement="bottom" title="กุ้งสด"></div>
+              <br>
+              <img src="img/ING2-Microwave.png" height="30" style="margin: 3px auto;"   data-toggle="tooltip" data-placement="bottom" title="ปรุงอาหารด้วยไมโครเวฟเท่านั้น">
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="block">
+        <div class="row">
+          <div class="col-md-12">
+            <span style="color:#FFF; background:#F39C12; padding: 3px; font-size:11pt; line-height:32pt; font-weight:600;">ADVERTORIAL</span><br>
+            <span style="color:#F39C12; background:#FFF; margin-top:13px; padding: 3px; font-size:18pt; font-weight:600;">How to: ทำ “โมจิหยดน้ำ” ขนมสุดเก๋แบบญี่ปุ่น ด้วยผงวุ้นตรานางเงือก</span>
+          </div>
+        </div>
+        <div class="row" style="margin-top:13px;">
+          <div class="col-md-4">
+            <img src="img/moji.png" class="img-responsive img-rounded" style="margin: 13px auto;">
+            <h3><i class="fa fa-list-alt"></i> วัตถุดิบ</h3>
+            <ul>
+              <li>น้ำเปล่า</li>
+              <li>น้ำตาลทรายป่น</li>
+              <li>ผงวุ้น (Agar)</li>
+              <li>น้ำเชื่อมจากน้ำตาลทรายแดง (Kokumitsu)</li>
+              <li>ผงแป้งถั่วเหลือง (Kinako)</li>
+            </ul>
+            <h3><i class="fa fa-cutlery"></i> อุปกรณ์</h3>
+            <ul>
+              <li>พิมพ์น้ำแข็งลูกบอล</li>
+              <li>กรวยเล็กๆ</li>
+            </ul>
+          </div>
+          <div class="col-md-8">
+            <h3><i class="fa fa-pencil"></i> วิธีทำ</h3>
+            <ol type="1">
+              <li>ผสมผงวุ้น 15 กรัม (ผงวุ้นไทย แนะนำตรา <b>นางเงือก</b> นะคะเพราะจะเป็นวุ้นนิ่ม) สมกับน้ำตาล 12 กรัม เข้าด้วยกัน</li>
+              <li>เติมน้ำเปล่า 500 cc. หรือ 500 มล. ทีละนิด เพราะว่าวุ้นละลายยาก คนให้ผงวุ้นละลายแล้วค่อยเติมน้ำอีกนิด คนไปเรื่อยๆและเติมน้ำจนละลายใสเหมือนน้ำเปล่า</li>
+              <li>นำไปตั้งไฟให้เดือด ทำให้วุ้นละลายจนหมด ยกลงจากเตา</li>
+              <li>กรอกลงไปในแม่พิมพ์รูปทรงกลม</li>
+              <li>ทิ้งไว้ให้เย็นเซตตัวในตู้เย็นแล้วค่อยนำออกจากพิมพ์ (ระหว่างนี้ เราสามารถไปเคี่ยวน้ำเชื่อมน้ำตาลแดงรอไว้ได้เลยนะคะ)</li>
+              <li>เตรียมภาชนะน่ารักๆ อย่างเช่นถาดใส่ทาโกะยากิแบบนี้ก็ได้ค่ะ</li>
+              <li>จัดวางวุ้นลงไปตรงกลาง เหยาะน้ำเชื่อม (Kokumitsu) ข้างๆ</li>
+              <li>โรยผงแป้งถั่วเหลือง(Kinako) ทับลงไป</li>
+            </ol>
+            ทำเสร็จแล้ว ก็ต้องรีบกินเลยนะคะ เพราะหยดน้ำนี้จะอยู่คงรูปแค่ 30 นาทีเท่านั้นค่ะ
+            <br><br>
+              <label>ความอร่อย</label>
+              <div class="progress">
+                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                  <span class="sr-only">40% Complete (success)</span>
+                </div>
+              </div>
+              <label>รูปลักษณ์</label>
+              <div class="progress">
+                <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                  <span class="sr-only">20% Complete</span>
+                </div>
+              </div>
+              <label>ความท้าทาย</label>
+              <div class="progress">
+                <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                  <span class="sr-only">60% Complete (warning)</span>
+                </div>
+              </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container full-width botw">
+
+</div>
+<div class="orange-bg">
+  <div class="container text-botw">
+      <div class="row">
+        <div class="col-md-6">
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/_mc5JxCWOx8" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="col-md-6">
+          <span style="font-size:12pt;"><img src="img/avatar1.jpg" height="80" style="border-radius:40px;"> By <a href="#" style="color:#EEE;">Yanisa Hemprachitchai</a></span>
+          <p class="quote">
+            “หนูรู้สึกว่าการทำอาหารเป็นสิ่งที่หนูชอบมากๆอย่างนึง ตั้งแต่หนูได้รู้จักเว็บไซต์นี้ หนูก็เริ่มส่งรูปอาหารมาแข่งที่ Cooking Challenge จนหนูได้รับรางวัล และรู้สึกภูมิใจมากที่ผู้คนชื่นชอบเมนูที่หนูทำ"
+          </p>
+          <button class="btn btn-lg btn-green">อ่านเพิ่มเติม</button>
+        </div>
+      </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <img src="img/HoF.png" width="100%">
+    </div>
+    <div class="col-md-4">
+      <div class="block" style="margin-top:24px;">Advertisement</div>
+      <div class="block">Advertisement</div>
+      <div class="block">Advertisement</div>
+      <div class="block">Advertisement</div>
+    </div>
+  </div>
+</div>
+<div class="container full-width footer">
+  Cooking Challenge Project, Spider Camp Charlie (2015).
+</div>
+<script>
+$("#js-rotating").Morphext({
+  // The [in] animation type. Refer to Animate.css for a list of available animations.
+  animation: "zoomIn",
+  // An array of phrases to rotate are created based on this separator. Change it if you wish to separate the phrases differently (e.g. So Simple | Very Doge | Much Wow | Such Cool).
+  separator: ",",
+  // The delay between the changing of each phrase in milliseconds.
+  speed: 2500,
+  complete: function () {
+      // Called after the entrance animation is executed.
+  }
+});
+
+$("#pork").hover(
+  function() {
+    $("#js-rotating").hide();
+    $("#show-on-hover").html("เนื้อหมู CP");
+    $("#show-on-hover").show();
+    $("#sauce").css("opacity","0.6");
+    $("#spaghetti").css("opacity","0.6");
+  }, function() {
+    $("#pork").css("opacity","1");
+    $("#sauce").css("opacity","1");
+    $("#spaghetti").css("opacity","1");
+    $("#js-rotating").show();
+    $("#show-on-hover").hide();
+  }
+);
+
+$("#sauce").hover(
+  function() {
+    $("#js-rotating").hide();
+    $("#show-on-hover").html("ซอสมะเขือเทศ");
+    $("#show-on-hover").show();
+    $("#pork").css("opacity","0.6");
+    $("#spaghetti").css("opacity","0.6");
+  }, function() {
+    $("#pork").css("opacity","1");
+    $("#sauce").css("opacity","1");
+    $("#spaghetti").css("opacity","1");
+    $("#js-rotating").show();
+    $("#show-on-hover").hide();
+  }
+);
+
+$("#spaghetti").hover(
+  function() {
+    $("#js-rotating").hide();
+    $("#show-on-hover").html("สปาเก็ตตี้");
+    $("#show-on-hover").show();
+    $("#pork").css("opacity","0.6");
+    $("#sauce").css("opacity","0.6");
+  }, function() {
+    $("#pork").css("opacity","1");
+    $("#sauce").css("opacity","1");
+    $("#spaghetti").css("opacity","1");
+    $("#js-rotating").show();
+    $("#show-on-hover").hide();
+  }
+);
+
+
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+</body>
+</html>
